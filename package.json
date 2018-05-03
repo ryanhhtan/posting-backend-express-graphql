@@ -1,0 +1,23 @@
+{
+  "name": "posting-backend-express-graphql",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel src -d dist",
+    "serve": "node dist/server.js",
+    "start": "nodemon src/server.js --exec babel-node"
+  },
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "mongoose": "^5.0.17",
+    "nodemon": "^1.17.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1"
+  }
+}
