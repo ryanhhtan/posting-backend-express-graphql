@@ -1,0 +1,36 @@
+type Name {
+  first: String
+  last: String
+}
+
+type User {
+  id: ID! 
+  name: Name
+  emai: String
+  avatar: String
+}
+
+type Credential {
+  user: User
+  token: String
+}
+
+input NameInput {
+  first: String
+  last: String
+}
+
+input UserInput {
+  name: NameInput
+  email: String
+  avatar: String
+  pasword: String
+}
+
+type Query {
+  user(id: ID!): User 
+}
+
+type Mutation {
+  registerUser(user: UserInput!): Credential
+}
