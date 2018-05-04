@@ -1,35 +1,38 @@
+import 'dotenv/config';
 import express from 'express';
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import { typeDefs, rootValue } from './graphql';
-
-// Get access env variables defined in .env file by dotenv 
-dotenv.config();
+import { extractAuthenticatedUser } from './authentication';
 
 // Create an express instance
-const server = express();  
+const server = express();
 const port = process.env.PORT;
-const db_uri = process.env.DB_URI; 
-//console.log(db_uri);
+const dbUri = process.env.DB_URI;
 
 // Setup mongoose connection
-mongoose.connect(db_uri);
+mongoose.connect(dbUri);
 
+// Build GraphQL schema
 const schema = buildSchema(typeDefs);
 
-// console.log(rootValue);
+// Extract authenticated user from JWT
+server.use(extractAuthenticatedUser);
 
-server.get('/', (req, res)=>{
-  res.send("hello");
+// A simple message showing the server is running.
+server.get('/', (req, res) => {
+  res.send('hello');
 });
 
-server.use('/graphql', graphqlHTTP({
+server.use('/graphql', graphqlHTTP(async(req, res) => ({
   schema,
-  rootValue
-}));
+  rootValue,
+  context: {
+    userId: req.authUserId,
+  },
+})));
 
-server.listen(port, ()=>{
-  console.log(`server is running on port ${ port }`);
+server.listen(port, () => {
+  console.log(`server is running on port ${port}`);
 });

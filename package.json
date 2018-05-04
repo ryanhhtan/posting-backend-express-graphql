@@ -4,23 +4,30 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
+    "preset": "eslint --ignore-path .gitignore .",
     "build": "babel src -d dist",
     "serve": "node dist/server.js",
     "start": "nodemon src/server.js --exec babel-node"
   },
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
     "js-md5": "^0.7.3",
+    "jsonwebtoken": "^8.2.1",
     "merge-graphql-schemas": "^1.5.1",
     "mongoose": "^5.0.17",
     "nodemon": "^1.17.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-eslint": "8",
     "babel-preset-env": "^1.6.1",
-    "eslint": "^4.19.1"
-  }
+    "eslint": "^4.19.1",
+    "eslint-config-strongloop": "^2.1.0"
+  },
+  "repository": "git@github.com:ryanhhtan/posting-backend-express-graphql.git",
+  "author": "Hai Hua (Ryan) Tan <ryanhhtan@gmail.com\">"
 }

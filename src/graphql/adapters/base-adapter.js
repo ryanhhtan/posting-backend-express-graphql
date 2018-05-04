@@ -6,11 +6,11 @@ class BaseAdapter {
     this.delete = this.delete.bind(this);
   }
 
-  async get(id, options=null) {
+  async get(id, options = null) {
     return await this.model.findById(id);
-  } 
+  }
 
-  async getAll(options=null) {
+  async getAll(options = null) {
     return await this.model.find();
   }
 

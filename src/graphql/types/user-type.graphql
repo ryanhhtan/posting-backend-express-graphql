@@ -6,7 +6,7 @@ type Name {
 type User {
   id: ID! 
   name: Name
-  emai: String
+  email: String
   avatar: String
 }
 
@@ -24,13 +24,20 @@ input UserInput {
   name: NameInput
   email: String
   avatar: String
-  pasword: String
+  password: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 type Query {
   user(id: ID!): User 
+  me: User
 }
 
 type Mutation {
-  registerUser(user: UserInput!): Credential
+  register(user: UserInput!): Credential
+  login(user: LoginInput!): Credential
 }
