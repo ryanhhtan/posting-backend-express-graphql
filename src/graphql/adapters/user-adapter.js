@@ -1,5 +1,5 @@
 import BaseAdapter from './base-adapter';
-import User from '../../models/User';
+import User from '../../models/user';
 import md5 from 'js-md5';
 import bcrypt from 'bcrypt';
 

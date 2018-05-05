@@ -14,8 +14,15 @@ class BaseAdapter {
     return await this.model.find();
   }
 
-  async delete(id) {
-    return await this.model.findByIdAndRemove(id);
+  async update(condition, update) {
+    // console.log(condition);
+    // console.log(update);
+    return await this.model.where().findOneAndUpdate(condition, update);
+  }
+
+  async delete(condition) {
+    // console.log(condition);
+    return await this.model.where().findOneAndRemove(condition);
   }
 }
 

@@ -3,20 +3,20 @@ import mongoose, { Schema } from 'mongoose';
 const UserSchema = new Schema({
   name: {
     first: String,
-    last: String
+    last: String,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
     required: true,
     unique: true,
-    select: false
+    select: false,
   },
-  avatar: String
+  avatar: String,
 });
 
 const User = mongoose.model('User', UserSchema);

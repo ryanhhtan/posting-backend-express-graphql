@@ -3,37 +3,55 @@ import { issueToken } from '../../authentication/';
 
 const UserResolver = {
   user: async({id}) => {
-    return await userAdapter.get(id);
+    try {
+      return await userAdapter.get(id);
+    } catch (e) {
+      console.error(e);
+      throw new Error('User not found');
+    }
   },
 
   register: async({user}) => {
     // console.log(user);
-    const newUser = await userAdapter.create(user);
-    const token = issueToken({id: newUser._id});
-    return {
-      user: newUser,
-      token,
-    };
+
+    try {
+      const newUser = await userAdapter.create(user);
+      const token = issueToken({id: newUser._id});
+      return {
+        user: newUser,
+        token,
+      };
+    } catch (e) {
+      /* handle error */
+      console.error(e);
+      throw new Error('Email already taken');
+    }
   },
 
   login: async({user}) => {
-    const validUser = await userAdapter.login(user);
-    if (!validUser)
+    try {
+      const validUser = await userAdapter.login(user);
+      const token = await issueToken({id: validUser._id});
       return {
-        user: null,
-        token: null,
+        user: validUser,
+        token,
       };
-
-    const token = await issueToken({id: validUser._id});
-    return {
-      user: validUser,
-      token,
-    };
+    } catch (e) {
+      /* handle error */
+      console.error(e);
+      throw new Error('Invalid email or password');
+    }
 
   },
 
   me: async(_, {userId}) => {
-    return await userAdapter.get(userId);
+    try {
+      return await userAdapter.get(userId);
+    } catch (e) {
+      /* handle error */
+      console.error(e);
+      throw new Error('Invalid email or password');
+    }
   },
 };
 
