@@ -3,5 +3,13 @@
   "rules": {
     "strict": 0
   },
-  "extends": "strongloop"
+  "extends": "strongloop",
+  "globals": {
+    "describe":false,
+    "beforeEach": false,
+    "beforeAll": false,
+    "test": false,
+    "expect": false,
+    "fetch": false
+  }
 }

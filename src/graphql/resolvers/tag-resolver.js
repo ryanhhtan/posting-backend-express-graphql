@@ -3,7 +3,7 @@ import tagAdapter from '../adapters/tag-adapter';
 const tagResolver = {
   tag: async({id}) => await tagAdapter.get(id),
 
-  tags: async() => await tagAdapter.getAll(),
+  tags: async(_, { userId }) => await tagAdapter.getAll({owner: userId}),
 
   createTag: async({tag}, {userId}) => {
     // console.log(tag);
