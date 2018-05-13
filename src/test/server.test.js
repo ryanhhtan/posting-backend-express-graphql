@@ -22,6 +22,8 @@ const testData = {
     body: 'test post1 - hello',
     feature_image_url: 'http://image.example.com/abcd.jpg',
   },
+
+  postCount: 5,
 };
 
 let savedResult = {
@@ -38,22 +40,34 @@ const getAuthenticatedClient = () => (new GraphQLClient(graphqlEndpoint, {
   },
 }));
 
+const cleanDatabase = async() => {
+  // Clear test database if exists
+  const collections = mongoose.connection.collections;
+  // console.log(collections);
+
+  try {
+    await Object.keys(collections).forEach(async key => {
+      await collections[key].drop();
+    });
+    // console.log(`DB cleaned at ${ Date.now() }`);
+  } catch (e) {
+    console.log(e);
+    /* handle error */
+  }
+};
+
+// const sleep = async(ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // Pre-test
 beforeAll(async() => {
-  // Start the test server
-  startServer();
-
-  // Clear test database if exists
-  const models = mongoose.connection.models;
-  await Object.keys(models).forEach(async(name) => {
-    await models[name].remove({});
-  });
-
+  await startServer();
+  await cleanDatabase();
+  // await sleep(5000);
 });
 
 // Tests
 
-describe('authentication', async() => {
+describe('authentication', () => {
   test('register', async() => {
     const mutation = `
     mutation registerUser($user: UserInput!) {
@@ -111,7 +125,9 @@ describe('authentication', async() => {
         ...testData.userData,
       },
     };
+
     const res = await request(graphqlEndpoint, mutation, variables);
+    // console.log(res);
     savedResult.token = res.login.token;
     expect(res.login.token).not.toBeNull();
   });
@@ -141,7 +157,7 @@ describe('authentication', async() => {
   });
 });
 
-describe('tags', async() => {
+describe('tags', () => {
   test('create tags', async() => {
     const client = getAuthenticatedClient();
     const mutation = `
@@ -152,7 +168,7 @@ describe('tags', async() => {
       }
     }
   `;
-    testData.tagsData.forEach(async tagInput => {
+    await testData.tagsData.forEach(async tagInput => {
       // console.log(tagInput);
 
       const variables = {
@@ -167,7 +183,7 @@ describe('tags', async() => {
       // console.log(res);
       const newTag = res.createTag;
       savedResult.tags.push(newTag);
-      expect(newTag).not.toBeNull();
+      expect(res.createTag.id).not.toBeNull();
     });
   });
 
@@ -255,8 +271,8 @@ describe('tags', async() => {
   });
 });
 
-describe('posts', async() => {
-  test('create post', async() => {
+describe('posts', () => {
+  test('create posts', async() => {
     const mutation = `
       mutation createPost($post: PostInput!) {
         createPost(post: $post) {
@@ -276,30 +292,66 @@ describe('posts', async() => {
     };
     // console.log(variables);
     const client = getAuthenticatedClient();
-    const res = await client.request(mutation, variables);
-    // console.log(res);
-    const newPostId = res.createPost.id;
-    savedResult.posts.push(newPostId);
-    expect(newPostId).not.toBeNull();
-  });
+    for (let i = 0; i < testData.postCount; ++i) {
+      const res = await client.request(mutation, variables);
+      // console.log(i);
+      const newPostId = res.createPost.id;
+      // console.log(res.createPost);
 
-  test('get all posts', async() => {
+      savedResult.posts.push(newPostId);
+      expect(newPostId).not.toBeNull();
+    }
+  }, 20000);
+
+  describe('get posts', () => {
     const query = `
-      query getPosts {
-        posts {
-          id
-          title
-          body
-          feature_image_url
-          tags {
-            name
+      query getPosts($first: Int, $after: String, $order: String) {
+        posts(first: $first, after: $after, order: $order) {
+          edges {
+            cursor
+            node {
+              id
+              title
+              body
+              feature_image_url
+              author {
+                id
+                email
+                name {
+                  first
+                  last
+                }
+                avatar
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
           }
         }
       }
     `;
-    const res = await request(graphqlEndpoint, query);
-    // console.log(res);
-    expect(res.posts.length).toBeGreaterThan(0);
+
+
+    test('first n posts', async() => {
+      let variables = {
+        first: testData.postCount,
+      };
+
+      let res = await request(graphqlEndpoint, query, variables);
+      // console.log(res.posts.edges.length);
+      expect(res.posts.edges.length).toBe(variables.first);
+
+      variables.after = res.posts.pageInfo.endCursor;
+      // console.log(variables);
+
+      res = await request(graphqlEndpoint, query, variables);
+      // console.log(res);
+
+      expect(res.posts.pageInfo.hasNextPage).toBeFalsy();
+      expect(res.posts.edges.length).toBe(0);
+    });
   });
 
   test('get single post', async() => {
@@ -365,4 +417,5 @@ describe('posts', async() => {
     // console.log(res);
     expect(res.deletePost.id).toBe(variables.id);
   });
+
 });

@@ -1,9 +1,10 @@
-import tagAdapter from '../adapters/tag-adapter';
+import { tagAdapter } from '../adapters';
 
 const tagResolver = {
   tag: async({id}) => await tagAdapter.get(id),
 
-  tags: async(_, { userId }) => await tagAdapter.getAll({owner: userId}),
+  tags: async(_, { userId }) => await tagAdapter
+    .getAll({owner: userId}),
 
   createTag: async({tag}, {userId}) => {
     // console.log(tag);

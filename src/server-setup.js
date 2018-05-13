@@ -6,9 +6,11 @@ import { buildSchema } from 'graphql';
 import { typeDefs, rootValue } from './graphql';
 import { extractAuthenticatedUser } from './authentication';
 
-const startServer = () => {
+// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const startServer = async() => {
   // Create an express instance
-  const server = express();
+  const app = express();
   const port = process.env.NODE_ENV === 'test'
     ? process.env.TEST_PORT : process.env.PORT;
   const dbUri = process.env.NODE_ENV === 'test'
@@ -16,19 +18,20 @@ const startServer = () => {
 
   // Setup mongoose connection
   mongoose.connect(dbUri);
+  // console.log(mongoose.connection);
 
   // Build GraphQL schema
   const schema = buildSchema(typeDefs);
 
   // Extract authenticated user from JWT
-  server.use(extractAuthenticatedUser);
+  app.use(extractAuthenticatedUser);
 
-  // A simple message showing the server is running.
-  server.get('/', (req, res) => {
+  // A simple message showing the app is running.
+  app.get('/', (req, res) => {
     res.send('hello');
   });
 
-  server.use('/graphql', graphqlHTTP(async(req, res) => ({
+  app.use('/graphql', graphqlHTTP((req, res) => ({
     schema,
     rootValue,
     context: {
@@ -36,11 +39,11 @@ const startServer = () => {
     },
   })));
 
-  server.listen(port, () => {
-    console.log(`server is running on port ${port}`);
+  app.listen(port, () => {
+    console.log(`app is listening on port ${port} `);
   });
 
-  return server;
+  // await sleep(3000);
 };
 
 export default startServer;

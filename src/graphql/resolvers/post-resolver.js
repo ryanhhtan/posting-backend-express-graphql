@@ -1,13 +1,11 @@
-import postAdapter from '../adapters/post-adapter';
+import { postAdapter } from '../adapters';
 
 const postResolver = {
   post: async({id}) => {
     return await postAdapter.get(id);
   },
 
-  posts: async() => {
-    return await postAdapter.getAll();
-  },
+  posts: async(params) => postAdapter.getDataConnection(params),
 
   createPost: async({post}, {userId}) => {
     if (!userId)

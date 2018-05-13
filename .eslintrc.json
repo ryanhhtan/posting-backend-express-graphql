@@ -6,6 +6,7 @@
   "extends": "strongloop",
   "globals": {
     "describe":false,
+    "Promise":false,
     "beforeEach": false,
     "beforeAll": false,
     "test": false,

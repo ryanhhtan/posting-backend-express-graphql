@@ -16,6 +16,7 @@ const PostSchema = new Schema({
   tags: [{
     type: Schema.Types.ObjectId,
     ref: 'Tag',
+    autopopulate: true,
   }],
   updated_at: {
     type: Date,
@@ -24,6 +25,22 @@ const PostSchema = new Schema({
   created_at: {
     type: Date,
   },
+});
+
+// Populate owner when calling 'find'
+PostSchema.post('find', async docs => {
+  for (let doc of docs) {
+    await doc.populate('author').populate('tags').execPopulate();
+  }
+});
+
+// Populate owner when calling 'findOne'
+// NOTE: 'findeById' would trigger 'findOne'
+PostSchema.post('findOne',
+  async(doc) => await doc.populate('author').populate('tags').execPopulate());
+
+PostSchema.post('save', async(doc) => {
+  await doc.populate('author').populate('tags').execPopulate();
 });
 
 const Post = mongoose.model('Post', PostSchema);

@@ -8,9 +8,10 @@
     "build": "rm -rf dist/*; babel src -d dist --ignore '**/*.test.js'; ./pack-graphql-types.sh",
     "serve": "node dist/server.js",
     "start": "nodemon src/server.js --exec babel-node",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "dependencies": {
+    "base-64": "^0.1.0",
     "bcrypt": "^2.0.1",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
@@ -28,7 +29,6 @@
     "babel-eslint": "8",
     "babel-jest": "^22.4.3",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",
     "eslint-config-strongloop": "^2.1.0",

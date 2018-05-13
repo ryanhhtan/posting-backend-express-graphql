@@ -16,9 +16,12 @@ export const extractAuthenticatedUser = async(req, res, next) => {
   if (!token)
     return next();
 
-  const { id } = await verifyToken(token);
-  // console.log(id);
-  req.authUserId = id;
-
+  try {
+    const { id } = await verifyToken(token);
+    // console.log(id);
+    req.authUserId = id;
+  } catch (e) {
+    /* handle error */
+  }
   return next();
 };

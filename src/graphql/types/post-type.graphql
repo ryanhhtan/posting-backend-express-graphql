@@ -1,3 +1,18 @@
+type PostEdge {
+  node: Post
+  cursor: String!
+} 
+
+type PageInfo {
+  hasNextPage: Boolean
+  endCursor: String
+} 
+
+type PostConnection {
+  edges: [PostEdge]!
+  pageInfo: PageInfo!
+}
+
 type Post {
   id: ID!
   title: String
@@ -18,7 +33,7 @@ input PostInput {
 
 type Query {
   post(id: ID!) : Post
-  posts: [Post]!
+  posts(first: Int, after: String, order: String): PostConnection
 }
 
 type Mutation {
