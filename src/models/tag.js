@@ -14,6 +14,7 @@ const TagSchema = new Schema({
 
 TagSchema.index({name: 1, owner: 1}, {unique: true});
 
+/*
 // Populate owner when calling 'find'
 TagSchema.post('find', async docs => {
   for (let doc of docs) {
@@ -33,6 +34,6 @@ TagSchema.post('save', async(doc) => {
 TagSchema.post('findOneAndUpdate', async(doc) => {
   await doc.populate('owner').execPopulate();
 });
-
+*/
 const Tag = mongoose.model('Tag', TagSchema);
 export default Tag;

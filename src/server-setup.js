@@ -3,10 +3,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
+
 import { typeDefs, rootValue } from './graphql';
 import { extractAuthenticatedUser } from './authentication';
-
-// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const startServer = async() => {
   // Create an express instance
@@ -17,8 +16,7 @@ const startServer = async() => {
     ? process.env.TEST_DB_URI : process.env.DB_URI;
 
   // Setup mongoose connection
-  mongoose.connect(dbUri);
-  // console.log(mongoose.connection);
+  await mongoose.connect(dbUri);
 
   // Build GraphQL schema
   const schema = buildSchema(typeDefs);
@@ -40,10 +38,8 @@ const startServer = async() => {
   })));
 
   app.listen(port, () => {
-    console.log(`app is listening on port ${port} `);
+    console.log(`server is listening on port ${port}`);
   });
-
-  // await sleep(3000);
 };
 
 export default startServer;

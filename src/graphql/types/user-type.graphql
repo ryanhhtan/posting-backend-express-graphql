@@ -8,6 +8,7 @@ type User {
   name: Name
   email: String
   avatar: String
+  mytags(first: Int, after: String): [Tag]
 }
 
 type Credential {
@@ -34,6 +35,7 @@ input LoginInput {
 
 type Query {
   user(id: ID!): User 
+  users(first: Int): [User]
   me: User
 }
 

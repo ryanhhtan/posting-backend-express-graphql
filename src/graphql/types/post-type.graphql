@@ -1,6 +1,6 @@
 type PostEdge {
-  node: Post
   cursor: String!
+  node: Post
 } 
 
 type PageInfo {
@@ -19,14 +19,15 @@ type Post {
   body: String
   feature_image_url: String
   author: User
-  tags: [Tag]!
+  tags: [Tag]
   created_at: String
   updated_at: String
+  comments(first: Int, after: String, order: String): CommentConnection
 } 
 
 input PostInput {
-  title: String!
-  body: String!
+  title: String
+  body: String
   feature_image_url: String
   tags: [ID]
 }
