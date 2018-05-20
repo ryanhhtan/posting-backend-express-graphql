@@ -1,0 +1,45 @@
+type Name {
+  first: String
+  last: String
+}
+
+type User {
+  id: ID! 
+  name: Name
+  email: String
+  avatar: String
+  mytags(first: Int, after: String): [Tag]
+}
+
+type Credential {
+  user: User
+  token: String
+}
+
+input NameInput {
+  first: String
+  last: String
+}
+
+input UserInput {
+  name: NameInput
+  email: String
+  avatar: String
+  password: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Query {
+  user(id: ID!): User 
+  users(first: Int): [User]
+  me: User
+}
+
+type Mutation {
+  register(user: UserInput!): Credential
+  login(user: LoginInput!): Credential
+}

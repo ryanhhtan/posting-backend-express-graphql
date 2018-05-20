@@ -1,0 +1,16 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "strict": 0
+  },
+  "extends": "strongloop",
+  "globals": {
+    "describe":false,
+    "Promise":false,
+    "beforeEach": false,
+    "beforeAll": false,
+    "test": false,
+    "expect": false,
+    "fetch": false
+  }
+}

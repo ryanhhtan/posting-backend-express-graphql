@@ -1,0 +1,44 @@
+type PostEdge {
+  cursor: String!
+  node: Post
+} 
+
+type PageInfo {
+  hasNextPage: Boolean
+  endCursor: String
+} 
+
+type PostConnection {
+  edges: [PostEdge]!
+  pageInfo: PageInfo!
+}
+
+type Post {
+  id: ID!
+  title: String
+  body: String
+  feature_image_url: String
+  author: User
+  tags: [Tag]
+  created_at: String
+  updated_at: String
+  comments(first: Int, after: String, order: String): CommentConnection
+} 
+
+input PostInput {
+  title: String
+  body: String
+  feature_image_url: String
+  tags: [ID]
+}
+
+type Query {
+  post(id: ID!) : Post
+  posts(first: Int, after: String, order: String): PostConnection
+}
+
+type Mutation {
+  createPost(post: PostInput!): Post
+  updatePost(id:ID!, post: PostInput!): Post
+  deletePost(id: ID!): Post
+}

@@ -1,0 +1,21 @@
+type Tag {
+  id: ID!
+  name: String
+  owner: User 
+}
+
+input TagInput {
+  name: String!
+}
+
+type Query {
+  tags: [Tag]!
+  tag(id: ID!): Tag
+  mytags: [Tag]!
+}
+
+type Mutation {
+  createTag(tag: TagInput!): Tag
+  updateTag(id: ID!, tag: TagInput!): Tag
+  deleteTag(id: ID!): Tag
+}

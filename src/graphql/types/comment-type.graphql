@@ -1,0 +1,34 @@
+type Comment {
+  id: ID!
+  author: User
+  body: String
+  comment_on: ID
+  sub_comments(first: Int, after: String, order: String): CommentConnection
+  created_at: String
+  updated_at: String
+}
+
+type CommentEdge {
+  cursor: String!
+  node: Comment
+}
+
+type CommentConnection{
+  edges: [CommentEdge]!
+  pageInfo: PageInfo!
+}
+
+input CommentInput {
+  body: String!
+}
+
+type Query {
+  comment(id: ID!): Comment
+  comments(on:ID!, first: Int, after: String, order: String): CommentConnection 
+}
+
+type Mutation {
+  createComment(comment_on: ID!, comment: CommentInput!): Comment
+  updateComment(id: ID!, comment: CommentInput!): Comment
+  deleteComment(id: ID!): Comment
+}
