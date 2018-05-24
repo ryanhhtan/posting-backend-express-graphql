@@ -5,6 +5,8 @@ import {
   makeDataConnection,
 } from '../type-resolvers/connection-type';
 
+import { deleletCommentsOn } from '../helpers';
+
 const commentResolver = {
   createComment: async({comment_on, comment}, {userId}) => {
     if (!userId)
@@ -28,6 +30,10 @@ const commentResolver = {
       .sort(order)
       .limit(args.first || 10);
     return makeDataConnection(CommentType, comments, cursorField, total);
+  },
+
+  deleteComment: async(args) => {
+    return deleletCommentsOn(args.onId);
   },
 };
 

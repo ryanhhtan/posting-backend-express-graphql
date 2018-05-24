@@ -30,5 +30,5 @@ type Query {
 type Mutation {
   createComment(comment_on: ID!, comment: CommentInput!): Comment
   updateComment(id: ID!, comment: CommentInput!): Comment
-  deleteComment(id: ID!): Comment
+  deleteComment(onId: ID!): Boolean
 }

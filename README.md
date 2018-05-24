@@ -3,7 +3,7 @@
 This is a simple web application to practice NodeJS, GraphQL and React. The app contains two parts, this repository is the backend
 - Tech stack
   GraphQL (Server side)
-  MongoDB (with Mongoose)
+  [[MongoDB]] (with Mongoose)
   NodeJS
   Jest
   

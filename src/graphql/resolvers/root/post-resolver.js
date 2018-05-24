@@ -5,6 +5,8 @@ import {
   makeDataConnection,
 } from '../type-resolvers/connection-type';
 
+import { deleletCommentsOn } from '../helpers';
+
 const postResolver = {
   post: async(args, context) => {
     return PostType(await Post.findById(args.id));
@@ -56,6 +58,7 @@ const postResolver = {
       if (!deletedPost)
         throw new Error('Only the author can delete the post.');
 
+      await deleletCommentsOn(deletedPost.id);
       return PostType(deletedPost);
     } catch (e) {
       /* handle error */

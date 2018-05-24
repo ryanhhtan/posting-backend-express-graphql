@@ -6,6 +6,7 @@ import { buildSchema } from 'graphql';
 
 import { typeDefs, rootValue } from './graphql';
 import { extractAuthenticatedUser } from './authentication';
+import cors from 'cors';
 
 const startServer = async() => {
   // Create an express instance
@@ -29,7 +30,7 @@ const startServer = async() => {
     res.send('hello');
   });
 
-  app.use('/graphql', graphqlHTTP((req, res) => ({
+  app.use('/graphql', cors(), graphqlHTTP((req, res) => ({
     schema,
     rootValue,
     context: {
